@@ -38,9 +38,11 @@ gpio_pin_t led4 = {PA_15, GPIOA, GPIO_PIN_15};	//	E
 gpio_pin_t led5 = {PA_8, GPIOA, GPIO_PIN_8};		//	F
 gpio_pin_t led6 = {PI_3, GPIOI, GPIO_PIN_3};		//	G
 
-gpio_pin_t but = {PB_8, GPIOB, GPIO_PIN_8};		//	BUTTON
+gpio_pin_t but = {PI_11, GPIOI, GPIO_PIN_11};		//	BUTTON
 
 int prnd; // Store random number
+
+uint32_t rnd;
 
 // this is the main method
 int main()
@@ -63,57 +65,73 @@ int main()
   
   // loop forever ...
   while(1)
-  {
-		// RESET ALL PINS
-		write_gpio(led0, LOW);
-		write_gpio(led1, LOW);
-		write_gpio(led2, LOW);
-		write_gpio(led3, LOW);
-		write_gpio(led4, LOW);
-		write_gpio(led5, LOW);
-		write_gpio(led6, LOW);
-		
-		//	generate random number
-		uint32_t rnd = (get_random_int() % 6) + 1;
-		
-		if (prnd == rnd) {
+  {	
+		if (read_gpio(but)){
+			//	generate random number
 			uint32_t rnd = (get_random_int() % 6) + 1;
+			
+			// Check if random number is the same as the previously generated number. If so, re-generate
+			if (prnd == rnd) {
+				uint32_t rnd = (get_random_int() % 6) + 1;
+			}
+			else {
+				if (rnd == 1){
+					write_gpio(led0, LOW);
+					write_gpio(led1, LOW);
+					write_gpio(led2, LOW);
+					write_gpio(led3, HIGH);
+					write_gpio(led4, LOW);
+					write_gpio(led5, LOW);
+					write_gpio(led6, LOW);
+				}
+				if (rnd == 2){
+					write_gpio(led0, HIGH);
+					write_gpio(led1, LOW);
+					write_gpio(led2, LOW);
+					write_gpio(led3, LOW);
+					write_gpio(led4, LOW);
+					write_gpio(led5, LOW);
+					write_gpio(led6, HIGH);
+				}
+				if (rnd == 3){
+					write_gpio(led0, HIGH);
+					write_gpio(led1, LOW);
+					write_gpio(led2, LOW);
+					write_gpio(led3, HIGH);
+					write_gpio(led4, LOW);
+					write_gpio(led5, LOW);
+					write_gpio(led6, HIGH);
+				}
+				if (rnd == 4){
+					write_gpio(led0, HIGH);
+					write_gpio(led1, HIGH);
+					write_gpio(led2, LOW);
+					write_gpio(led3, LOW);
+					write_gpio(led4, LOW);
+					write_gpio(led5, HIGH);
+					write_gpio(led6, HIGH);
+				}
+				if (rnd == 5){
+					write_gpio(led0, HIGH);
+					write_gpio(led1, HIGH);
+					write_gpio(led2, LOW);
+					write_gpio(led3, HIGH);
+					write_gpio(led4, LOW);
+					write_gpio(led5, HIGH);
+					write_gpio(led6, HIGH);
+				}
+				if (rnd == 6){
+					write_gpio(led0, HIGH);
+					write_gpio(led1, HIGH);
+					write_gpio(led2, HIGH);
+					write_gpio(led3, LOW);
+					write_gpio(led4, HIGH);
+					write_gpio(led5, HIGH);
+					write_gpio(led6, HIGH);
+				}
+			}
 		}
-		else {
-			if (rnd == 1){
-				write_gpio(led3, HIGH);
-			}
-			if (rnd == 2){
-				write_gpio(led0, HIGH);
-				write_gpio(led6, HIGH);
-			}
-			if (rnd == 3){
-				write_gpio(led0, HIGH);
-				write_gpio(led3, HIGH);
-				write_gpio(led6, HIGH);
-			}
-			if (rnd == 4){
-				write_gpio(led0, HIGH);
-				write_gpio(led1, HIGH);
-				write_gpio(led5, HIGH);
-				write_gpio(led6, HIGH);
-			}
-			if (rnd == 5){
-				write_gpio(led0, HIGH);
-				write_gpio(led1, HIGH);
-				write_gpio(led3, HIGH);
-				write_gpio(led5, HIGH);
-				write_gpio(led6, HIGH);
-			}
-			if (rnd == 6){
-				write_gpio(led0, HIGH);
-				write_gpio(led1, HIGH);
-				write_gpio(led2, HIGH);
-				write_gpio(led4, HIGH);
-				write_gpio(led5, HIGH);
-				write_gpio(led6, HIGH);
-			}
-		}
+		else{}
 		prnd = rnd;
 		HAL_Delay(1000);
   }
